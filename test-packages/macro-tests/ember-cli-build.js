@@ -33,11 +33,38 @@ module.exports = function(defaults) {
     outputFile: 'apple.js'
   })
 
-
   app.import('vendor/four.js', { outputFile: 'ordered.js' });
   app.import('vendor/two.js', { outputFile: 'ordered.js' });
   app.import('vendor/three.js', { outputFile: 'ordered.js' });
   app.import('vendor/one.js', { outputFile: 'ordered.js' });
+
+  const HIGHCHARTS_BASE_PATH = 'node_modules/highcharts';
+  const highchartsPath = `${HIGHCHARTS_BASE_PATH}/highcharts.src.js`;
+  const highchartsAccessibilityPath = `${HIGHCHARTS_BASE_PATH}/modules/accessibility.src.js`;
+
+  app.import(highchartsPath, { outputFile: 'assets/highcharts/highcharts.js' });
+  app.import(highchartsAccessibilityPath, { outputFile: 'assets/highcharts/modules/accessibility.js' });
+
+  const HIGHLIGHTJS_BASE_PATH = 'node_modules/highlight.js';
+  app.import(`${HIGHLIGHTJS_BASE_PATH}/lib/highlight.js`, {
+    outputFile: 'assets/highlight.js/highlight.js',
+    using: [
+      {
+        transformation: 'amd',
+        as: 'highlight',
+      },
+    ],
+  });
+
+  app.import(`${HIGHLIGHTJS_BASE_PATH}/lib/languages/json.js`, {
+    outputFile: 'assets/highlight.js/languages/json.js',
+    using: [
+      {
+        transformation: 'cjs',
+        as: 'highlight-json',
+      },
+    ],
+  });
 
   if (process.env.CLASSIC) {
     return app.toTree();
